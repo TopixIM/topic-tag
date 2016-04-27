@@ -15,8 +15,8 @@
                  [binaryage/devtools        "0.5.2"       :scope "test"]
                  [differ "0.2.2"]
                  [mvc-works/hsl             "0.1.2"]
-                 [mvc-works/respo           "0.1.9"]
-                 [mvc-works/respo-client    "0.1.8"]])
+                 [mvc-works/respo           "0.1.15"]
+                 [mvc-works/respo-client    "0.1.11"]])
 
 (require '[adzerk.boot-cljs :refer [cljs]]
          '[adzerk.boot-reload :refer [reload]]
