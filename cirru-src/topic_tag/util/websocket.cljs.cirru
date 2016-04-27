@@ -9,7 +9,7 @@ defonce send-chan $ chan
 
 defonce receive-chan $ chan
 
-def ws $ new js/WebSocket |ws://repo:4005
+defonce ws $ new js/WebSocket |ws://frp.im:4010
 
 enable-console-print!
 
@@ -26,8 +26,9 @@ set! (.-onmessage ws)
 
 set! (.-onclose ws)
   fn (event)
+    .error js/console "|socket is broken"
     go
-      <! $ timeout 30000
+      <! $ timeout 6000
       .reload js/location
 
 go $ loop ([])

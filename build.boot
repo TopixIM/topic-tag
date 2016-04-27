@@ -62,17 +62,20 @@
     (cirru-sepal :paths ["cirru-src"] :watch true)
     (watch)
     (reload :on-jsload 'topic-tag.core/on-jsload)
-    (cljs)))
+    (cljs)
+    (target)))
 
 (deftask build-simple []
   (comp
     (cljs)
-    (html-entry :dsl (html-dsl {:env :dev}) :html-name "index.html")))
+    (html-entry :dsl (html-dsl {:env :dev}) :html-name "index.html")
+    (target)))
 
 (deftask build-advanced []
   (comp
     (cljs :optimizations :advanced)
-    (html-entry :dsl (html-dsl {:env :build}) :html-name "index.html")))
+    (html-entry :dsl (html-dsl {:env :build}) :html-name "index.html")
+    (target)))
 
 (deftask rsync []
   (fn [next-task]
@@ -89,7 +92,8 @@
   (comp
    (pom)
    (jar)
-   (install)))
+   (install)
+   (target)))
 
 (deftask deploy []
   (comp
