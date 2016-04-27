@@ -28,7 +28,7 @@ defn dispatch (op op-data)
 def build-mutate $ mutate-factory global-element global-states
 
 defn render-element ()
-  .info js/console |rendering @global-store @global-states
+  -- .info js/console |rendering @global-store @global-states
   render-app (component-container @global-store)
     , @global-states build-mutate
 
@@ -53,7 +53,7 @@ defn rerender-app ()
         purify-element @global-element
         purify-element element
 
-    .info js/console "|DOM changes:" changes
+    -- .info js/console "|DOM changes:" changes
     patch-instance changes (get-root)
       , deliver-event
     reset! global-element element
@@ -63,8 +63,8 @@ defn listen-store-changes ()
     let
       (changes $ <! ws-client/receive-chan)
       reset! global-store $ differ/patch @global-store changes
-      .info js/console |∆ changes
-      .info js/console "|new store" @global-store
+      -- .info js/console |∆ changes
+      -- .info js/console "|new store" @global-store
       rerender-app
       recur
 

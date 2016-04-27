@@ -9,7 +9,7 @@ defn render (w h)
         :width $ or w |100%
         :height $ or h (|1em)
         :display $ if (some? w)
-          , |inner-block |block
+          , |inline-block |block
         :vertical-align |middle
         :flex-grow 0
         :flex-shrink 0

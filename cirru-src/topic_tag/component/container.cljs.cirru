@@ -4,6 +4,7 @@ ns topic-tag.component.container $ :require
   [] respo.alias :refer $ [] create-comp div span
   [] topic-tag.component.sidebar :refer $ [] component-sidebar
   [] topic-tag.component.login :refer $ [] component-login
+  [] topic-tag.component.tags-manager :refer $ [] component-tags-manager
 
 def style-layout $ {} (:width |100%)
   :height |100%
@@ -41,7 +42,14 @@ defn render (store)
         div ({} :style style-sidebar)
           component-sidebar $ first router
         div ({} :style style-container)
-          if logged-in? nil $ component-login
+          if (not logged-in?)
+            component-login
+          if logged-in? $ let
+            (tags $ :tags store)
+              results $ :tags (:results session)
+
+            component-tags-manager tags results
+
         div ({} :style style-store)
           span $ {} :attrs
             {} :inner-text $ pr-str store
