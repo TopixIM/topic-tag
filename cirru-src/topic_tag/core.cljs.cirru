@@ -62,9 +62,10 @@ defn listen-store-changes ()
   go $ loop ([])
     let
       (changes $ <! ws-client/receive-chan)
+      .info js/console "|old store:" @global-store
       reset! global-store $ differ/patch @global-store changes
-      -- .info js/console |∆ changes
-      -- .info js/console "|new store" @global-store
+      .info js/console |∆ changes
+      .info js/console "|new store:" @global-store
       rerender-app
       recur
 

@@ -19,3 +19,9 @@ def button $ {} (:border |none)
   :font-size |14px
   :padding "|0 8px"
   :cursor |pointer
+
+def field-line $ {} (:padding "|8px 16px")
+
+def field-guide $ {}
+  :color $ hsl 0 0 50
+  :line-height 2

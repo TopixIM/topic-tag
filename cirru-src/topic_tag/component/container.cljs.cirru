@@ -5,6 +5,7 @@ ns topic-tag.component.container $ :require
   [] topic-tag.component.sidebar :refer $ [] component-sidebar
   [] topic-tag.component.login :refer $ [] component-login
   [] topic-tag.component.tags-manager :refer $ [] component-tags-manager
+  [] topic-tag.component.profile :refer $ [] component-profile
 
 def style-layout $ {} (:width |100%)
   :height |100%
@@ -18,18 +19,22 @@ def style-sidebar $ {}
 def style-store $ {} (:position |absolute)
   :width |400px
   :height |200px
-  :background $ hsl 0 0 10 0.3
+  :background $ hsl 0 0 10 0.24
   :color |white
-  :left |10px
-  :top |200px
+  :left |0px
+  :top |0px
   :font-family |Menlo
   :padding |4px
   :font-size |12px
   :line-height |1.5em
+  :pointer-events |none
 
 def style-container $ {}
   :background-color $ hsl 200 70 90
   :flex 1
+  :display |flex
+  :justify-content |center
+  :align-items |center
 
 defn render (store)
   fn (state mutate)
@@ -44,11 +49,19 @@ defn render (store)
         div ({} :style style-container)
           if (not logged-in?)
             component-login
-          if logged-in? $ let
-            (tags $ :tags store)
-              results $ :tags (:results session)
+          if
+            and logged-in? $ = (first router)
+              , :tags
+            let
+              (tags $ :tags store)
+                results $ :tags (:results session)
 
-            component-tags-manager tags results
+              component-tags-manager tags results
+
+          if
+            and logged-in? $ = (first router)
+              , :profile
+            component-profile $ :user store
 
         div ({} :style style-store)
           span $ {} :attrs
