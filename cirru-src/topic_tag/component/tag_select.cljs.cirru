@@ -16,6 +16,6 @@ defn render (tag resolve-select)
       span $ {} :attrs
         {} :inner-text $ :text tag
         , :event
-        {} :click $ resolve-select tag
+        {} :click resolve-select
 
 def component-tag-select $ create-comp :tag-select render

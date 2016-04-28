@@ -7,6 +7,7 @@ ns topic-tag.component.container $ :require
   [] topic-tag.component.tags-manager :refer $ [] component-tags-manager
   [] topic-tag.component.profile :refer $ [] component-profile
   [] topic-tag.component.topics :refer $ [] component-topics
+  [] topic-tag.component.topic-editor :refer $ [] component-topic-editor
 
 def style-layout $ {} (:width |100%)
   :height |100%
@@ -48,26 +49,24 @@ defn render (store)
         div ({} :style style-sidebar)
           component-sidebar $ first router
         div ({} :style style-container)
-          if (not logged-in?)
+          if logged-in?
+            case (first router)
+              :tags $ let
+                (tags $ :tags store)
+                  results $ :tags (:results session)
+
+                component-tags-manager tags results
+
+              :profile $ component-profile (:user store)
+              :topics $ component-topics (:topics store)
+              :add-topic $ let
+                (results $ :tags (:results session))
+
+                component-topic-editor nil results
+
+              , nil
+
             component-login
-          if
-            and logged-in? $ = (first router)
-              , :tags
-            let
-              (tags $ :tags store)
-                results $ :tags (:results session)
-
-              component-tags-manager tags results
-
-          if
-            and logged-in? $ = (first router)
-              , :profile
-            component-profile $ :user store
-
-          if
-            and logged-in? $ = (first router)
-              , :topics
-            component-topics $ :topics store
 
         div ({} :style style-store)
           span $ {} :attrs

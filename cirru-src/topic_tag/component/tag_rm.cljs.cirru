@@ -23,7 +23,7 @@ defn render (tag resolve-remove)
           :color $ hsl 0 80 70
           :cursor |pointer
         , :event
-        {} :click $ resolve-remove tag
+        {} :click resolve-remove
         , :attrs
         {} :inner-text |rm
 

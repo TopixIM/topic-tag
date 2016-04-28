@@ -60,7 +60,7 @@ defn render (tags results)
         ->> tags
           map $ fn (tag)
             [] (:id tag)
-              component-tag-rm tag handle-remove
+              component-tag-rm tag $ handle-remove tag
 
           into $ sorted-map
 
@@ -77,7 +77,7 @@ defn render (tags results)
         ->> results
           map $ fn (tag)
             [] (:id tag)
-              component-tag-select tag handle-select
+              component-tag-select tag $ handle-select tag
 
           into $ sorted-map
 
