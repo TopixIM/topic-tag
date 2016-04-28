@@ -2,13 +2,7 @@
 ns topic-tag.component.profile $ :require
   [] hsl.core :refer $ [] hsl
   [] topic-tag.style.widget :as widget
-  [] respo.alias :refer $ [] create-comp create-element div span input
-
-defn button (props & children)
-  create-element :button props children
-
-defn img (props & children)
-  create-element :img props children
+  [] respo.alias :refer $ [] create-comp div span input button img
 
 defn init-state (user)
   {}

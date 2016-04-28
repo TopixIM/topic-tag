@@ -32,6 +32,14 @@ defn handle-keydown (state mutate)
         do (dispatch :tag/submit state)
           mutate |
 
+defn handle-remove (tag)
+  fn (simple-event dispatch)
+    dispatch :user/rm-tag $ :id tag
+
+defn handle-select (tag)
+  fn (simple-event dispatch)
+    dispatch :user/select-tag $ :id tag
+
 defn render (tags results)
   fn (state mutate)
     div
@@ -52,7 +60,7 @@ defn render (tags results)
         ->> tags
           map $ fn (tag)
             [] (:id tag)
-              component-tag-rm tag
+              component-tag-rm tag handle-remove
 
           into $ sorted-map
 
@@ -69,7 +77,7 @@ defn render (tags results)
         ->> results
           map $ fn (tag)
             [] (:id tag)
-              component-tag-select tag
+              component-tag-select tag handle-select
 
           into $ sorted-map
 

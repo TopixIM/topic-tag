@@ -1,12 +1,9 @@
 
 ns topic-tag.component.login $ :require
   [] hsl.core :refer $ [] hsl
-  [] respo.alias :refer $ [] create-comp create-element div span input
+  [] respo.alias :refer $ [] create-comp div span input button
   [] topic-tag.style.widget :as widget
   [] topic-tag.component.space :refer $ [] component-space
-
-defn button (props & children)
-  create-element :button props children
 
 defn init-state ()
   {} :name | :password |
@@ -42,7 +39,6 @@ defn handle-submit (state mutate)
 
 defn render ()
   fn (state mutate)
-    .log js/console "|new state" state
     div
       {} :style $ {} (:width |400px)
         :background-color $ hsl 0 0 100

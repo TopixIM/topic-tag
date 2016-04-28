@@ -3,11 +3,7 @@ ns topic-tag.component.tag-select $ :require
   [] hsl.core :refer $ [] hsl
   [] respo.alias :refer $ [] create-comp div span
 
-defn handle-select (tag)
-  fn (simple-event dispatch)
-    dispatch :user/select-tag $ :id tag
-
-defn render (tag)
+defn render (tag resolve-select)
   fn (state mutate)
     div
       {} :style $ {}
@@ -20,6 +16,6 @@ defn render (tag)
       span $ {} :attrs
         {} :inner-text $ :text tag
         , :event
-        {} :click $ handle-select tag
+        {} :click $ resolve-select tag
 
 def component-tag-select $ create-comp :tag-select render

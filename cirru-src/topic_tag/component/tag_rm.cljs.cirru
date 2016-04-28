@@ -4,11 +4,7 @@ ns topic-tag.component.tag-rm $ :require
   [] respo.alias :refer $ [] create-comp div span
   [] topic-tag.component.space :refer $ [] component-space
 
-defn handle-remove (tag)
-  fn (simple-event dispatch)
-    dispatch :user/rm-tag $ :id tag
-
-defn render (tag)
+defn render (tag resolve-remove)
   fn (state mutate)
     div
       {} :style $ {}
@@ -27,7 +23,7 @@ defn render (tag)
           :color $ hsl 0 80 70
           :cursor |pointer
         , :event
-        {} :click $ handle-remove tag
+        {} :click $ resolve-remove tag
         , :attrs
         {} :inner-text |rm
 

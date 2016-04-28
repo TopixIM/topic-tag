@@ -6,6 +6,7 @@ ns topic-tag.component.container $ :require
   [] topic-tag.component.login :refer $ [] component-login
   [] topic-tag.component.tags-manager :refer $ [] component-tags-manager
   [] topic-tag.component.profile :refer $ [] component-profile
+  [] topic-tag.component.topics :refer $ [] component-topics
 
 def style-layout $ {} (:width |100%)
   :height |100%
@@ -62,6 +63,11 @@ defn render (store)
             and logged-in? $ = (first router)
               , :profile
             component-profile $ :user store
+
+          if
+            and logged-in? $ = (first router)
+              , :topics
+            component-topics $ :topics store
 
         div ({} :style style-store)
           span $ {} :attrs
