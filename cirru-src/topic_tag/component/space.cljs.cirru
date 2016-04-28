@@ -7,7 +7,7 @@ defn render (w h)
     div $ {} :style
       {}
         :width $ or w |100%
-        :height $ or h (|1em)
+        :height $ or h |1em
         :display $ if (some? w)
           , |inline-block |block
         :vertical-align |middle

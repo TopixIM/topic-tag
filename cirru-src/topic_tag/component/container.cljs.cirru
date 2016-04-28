@@ -7,6 +7,7 @@ ns topic-tag.component.container $ :require
   [] topic-tag.component.tags-manager :refer $ [] component-tags-manager
   [] topic-tag.component.profile :refer $ [] component-profile
   [] topic-tag.component.topics :refer $ [] component-topics
+  [] topic-tag.component.chat-room :refer $ [] component-chat-room
   [] topic-tag.component.topic-editor :refer $ [] component-topic-editor
 
 def style-layout $ {} (:width |100%)
@@ -20,16 +21,16 @@ def style-sidebar $ {}
 
 def style-store $ {} (:position |absolute)
   :width |400px
-  :height |200px
+  :height |300px
   :background $ hsl 0 0 10 0.24
   :color |white
-  :left |0px
+  :right |0px
   :top |0px
   :font-family |Menlo
   :padding |4px
   :font-size |12px
   :line-height |1.5em
-  :pointer-events |none
+  :overflow |auto
 
 def style-container $ {}
   :background-color $ hsl 200 70 90
@@ -64,6 +65,7 @@ defn render (store)
 
                 component-topic-editor nil results
 
+              :chat-room $ component-chat-room (:current-topic store)
               , nil
 
             component-login
