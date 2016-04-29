@@ -38,11 +38,13 @@ defn render-route (router-name this-name guide)
       , :attrs
       {} :inner-text guide
 
-defn render (router-name)
+defn render (router-name count-online)
   fn (state mutate)
     div ({} :style style-root)
       render-route router-name :topics |Topics
-      render-route router-name :tags |Tags
+      render-route router-name :my-tags "|My Tags"
+      render-route router-name :live-users $ str count-online "| online users"
+      render-route router-name :all-tags "|All Tags"
       render-route router-name :profile |Profile
 
 def component-sidebar $ create-comp :sidebar render

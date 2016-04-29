@@ -36,7 +36,7 @@ defn mount-app ()
   let
     (element $ render-element)
       deliver-event $ build-deliver-event global-element dispatch
-    .log js/console |element element
+    -- .log js/console |element element
     initialize-instance (get-root)
       , deliver-event
     activate-instance (purify-element element)

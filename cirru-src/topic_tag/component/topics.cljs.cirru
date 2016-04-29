@@ -11,19 +11,27 @@ defn handle-add (simple-event dispatch)
 defn render (topics)
   fn (state mutate)
     div
-      {} :style $ {} (:width |400px)
-        :min-height |400px
+      {} :style $ {} (:width |100%)
+        :height |100%
         :background-color $ hsl 0 0 100
       div ({} :style widget/toolbar)
         button $ {} :style widget/button :event ({} :click handle-add)
           , :attrs
           {} :inner-text "|Add topic"
 
-      div ({})
+      div
+        {} :style $ {} (:display |flex)
+          :flex-direction |column
         ->> topics
-          map $ fn (topic)
+          sort $ fn (topic-a topic-b)
+            compare (:time topic-a)
+              :time topic-b
+
+          map-indexed $ fn (index topic)
             [] (:id topic)
-              component-topic-entry topic
+              div
+                {} :style $ {} :order (inc index)
+                component-topic-entry topic
 
           into $ sorted-map
 

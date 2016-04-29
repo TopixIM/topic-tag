@@ -3,6 +3,7 @@ ns topic-tag.component.profile $ :require
   [] hsl.core :refer $ [] hsl
   [] topic-tag.style.widget :as widget
   [] respo.alias :refer $ [] create-comp div span input button img
+  [] topic-tag.component.space :refer $ [] component-space
 
 defn init-state (user)
   {}
@@ -20,6 +21,9 @@ defn handle-input (mutate field-key)
 defn handle-update (state)
   fn (simple-event dispatch)
     dispatch :user/update state
+
+defn handle-logout (simple-event dispatch)
+  dispatch :user/logout nil
 
 defn render-field
   mutate field-key field-value guide
@@ -61,5 +65,11 @@ defn render (user)
           {} :click $ handle-update state
           , :attrs
           {} :inner-text |Update
+
+      component-space nil |80px
+      div ({} :style widget/toolbar)
+        button $ {} :style widget/button :event ({} :click handle-logout)
+          , :attrs
+          {} :inner-text "|Log out"
 
 def component-profile $ create-comp :profile init-state update-state render

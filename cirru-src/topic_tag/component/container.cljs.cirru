@@ -9,6 +9,8 @@ ns topic-tag.component.container $ :require
   [] topic-tag.component.topics :refer $ [] component-topics
   [] topic-tag.component.chat-room :refer $ [] component-chat-room
   [] topic-tag.component.topic-editor :refer $ [] component-topic-editor
+  [] topic-tag.component.tags-overview :refer $ [] component-tags-overview
+  [] topic-tag.component.members-overview :refer $ [] component-members-overview
 
 def style-layout $ {} (:width |100%)
   :height |100%
@@ -19,18 +21,23 @@ def style-sidebar $ {}
   :background-color $ hsl 0 0 90
   :width |300px
 
-def style-store $ {} (:position |absolute)
-  :width |400px
-  :height |300px
-  :background $ hsl 0 0 10 0.24
-  :color |white
-  :right |0px
-  :top |0px
-  :font-family |Menlo
-  :padding |4px
-  :font-size |12px
-  :line-height |1.5em
-  :overflow |auto
+defn render-store (store)
+  div
+    {} :style $ {} (:position |absolute)
+      :width |400px
+      :height |300px
+      :background $ hsl 0 0 10 0.24
+      :color |white
+      :right |0px
+      :top |100px
+      :font-family |Menlo
+      :padding |4px
+      :font-size |12px
+      :line-height |1.5em
+      :overflow |auto
+      :pointer-events |none
+    span $ {} :attrs
+      {} :inner-text $ pr-str (:topics store)
 
 def style-container $ {}
   :background-color $ hsl 200 70 90
@@ -45,15 +52,18 @@ defn render (store)
       (session $ :state store)
         logged-in? $ some? (:user-id session)
         router $ :router session
+        live-users $ :live-users store
 
-      div ({} :style style-layout)
-        div ({} :style style-sidebar)
-          component-sidebar $ first router
-        div ({} :style style-container)
-          if logged-in?
+      if logged-in?
+        div ({} :style style-layout)
+          div ({} :style style-sidebar)
+            component-sidebar (first router)
+              count live-users
+
+          div ({} :style style-container)
             case (first router)
-              :tags $ let
-                (tags $ :tags store)
+              :my-tags $ let
+                (tags $ :my-tags store)
                   results $ :tags (:results session)
 
                 component-tags-manager tags results
@@ -66,12 +76,19 @@ defn render (store)
                 component-topic-editor nil results
 
               :chat-room $ component-chat-room (:current-topic store)
+              :all-tags $ component-tags-overview (:tags store)
+              :live-users $ component-members-overview live-users
               , nil
 
-            component-login
+          render-store store
 
-        div ({} :style style-store)
-          span $ {} :attrs
-            {} :inner-text $ pr-str store
+        div
+          {} :style $ {} (:display |flex)
+            :justify-content |center
+            :align-items |center
+            :position |absolute
+            :width |100%
+            :height |100%
+          component-login
 
 def component-container $ create-comp :container render
