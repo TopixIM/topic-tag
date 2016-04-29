@@ -27,7 +27,23 @@ defn render (topic)
         {} :click $ handle-click topic
 
       span $ {} :attrs
-        {} :inner-text $ :text topic
+        {} :inner-text $ let
+          (text $ :text topic)
+          if
+            > (count text)
+              , 0
+            , text |[empty]
+
+      component-space |16px nil
+      span $ {} :style
+        {}
+          :background-color $ hsl 0 60 80
+          :padding "|0 8px"
+          :color |white
+          :border-radius |8px
+        , :attrs
+        {} :inner-text $ :messages-count topic
+
       component-space |16px nil
       div
         {} :style $ {} (:display |inline-block)

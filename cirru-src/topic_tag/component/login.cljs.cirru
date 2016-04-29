@@ -37,6 +37,8 @@ defn handle-submit (state mutate)
         do (dispatch :user/enter state)
           mutate :clear!
 
+def hint-unstable "|This app is not stable and this is running in develop mode. Crashes and refreshes frequently. Also you may talk to me on https://www.livecoding.tv/jiyinyiyong/chat"
+
 defn render ()
   fn (state mutate)
     div
@@ -54,7 +56,14 @@ defn render ()
           :font-weight |lighter
         span $ {} :style ({})
           , :attrs
-          {} $ :inner-text "|Log in"
+          {} $ :inner-text |Enter
+
+      div
+        {} :style $ {}
+          :color $ hsl 0 0 60
+          :padding "|0 16px"
+          :font-size |12px
+        span $ {} :attrs ({} :inner-text hint-unstable)
 
       div ({} :style style-field)
         div ({} :style style-guide)

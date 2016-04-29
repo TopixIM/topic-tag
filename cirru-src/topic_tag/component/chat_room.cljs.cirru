@@ -13,6 +13,7 @@ defn update-state (state text)
 
 defn handle-input (mutate state)
   fn (simple-event dispatch)
+    dispatch :state/buffer $ :value simple-event
     mutate $ :value simple-event
 
 defn handle-submit (mutate state)
@@ -27,7 +28,11 @@ defn handle-keydown (mutate state)
       do (dispatch :message/create state)
         mutate |
 
-defn render (topic)
+defn handle-edit (topic-id)
+  fn (simple-event dispatch)
+    dispatch :topic/open-editor topic-id
+
+defn render (topic buffers)
   fn (state mutate)
     div
       {} :style $ {} (:width |100%)
@@ -41,15 +46,22 @@ defn render (topic)
           :font-weight |lighter
           :padding "|0 16px"
           :line-height 2
+          :display |flex
+          :justify-content |space-between
+          :align-items |center
         span $ {} :attrs
           {} :inner-text $ :text topic
+        button $ {} :style widget/button :event
+          {} :click $ handle-edit (:id topic)
+          , :attrs
+          {} :inner-text |Edit
 
       div
         {} :style $ {} (:flex 1)
           :display |flex
           :flex-direction |column
           :overflow |auto
-          :padding-bottom |400px
+          :padding-bottom |200px
         ->> (:messages topic)
           sort $ fn (entry-1 entry-2)
             compare
@@ -66,6 +78,15 @@ defn render (topic)
                   component-message message
 
           into $ sorted-map
+
+      div
+        {} $ :style
+          {} (:max-height |200px)
+            :overflow |auto
+
+        ->> buffers $ map-indexed
+          fn (index buffer-message)
+            [] index $ component-message buffer-message
 
       div
         {} :style $ {} (:display |flex)

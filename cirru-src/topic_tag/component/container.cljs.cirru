@@ -11,6 +11,7 @@ ns topic-tag.component.container $ :require
   [] topic-tag.component.topic-editor :refer $ [] component-topic-editor
   [] topic-tag.component.tags-overview :refer $ [] component-tags-overview
   [] topic-tag.component.members-overview :refer $ [] component-members-overview
+  [] topic-tag.component.notification-center :refer $ [] comp-notification-center
 
 def style-layout $ {} (:width |100%)
   :height |100%
@@ -18,7 +19,7 @@ def style-layout $ {} (:width |100%)
   :display |flex
 
 def style-sidebar $ {}
-  :background-color $ hsl 0 0 90
+  :background-color $ hsl 0 0 96
   :width |300px
 
 defn render-store (store)
@@ -37,7 +38,7 @@ defn render-store (store)
       :overflow |auto
       :pointer-events |none
     span $ {} :attrs
-      {} :inner-text $ pr-str (:topics store)
+      {} :inner-text $ pr-str (:state store)
 
 def style-container $ {}
   :background-color $ hsl 200 70 90
@@ -70,17 +71,26 @@ defn render (store)
 
               :profile $ component-profile (:user store)
               :topics $ component-topics (:topics store)
+              :my-topics $ component-topics (:my-topics store)
               :add-topic $ let
                 (results $ :tags (:results session))
 
                 component-topic-editor nil results
 
+              :topic-editor $ let
+                (topic-data $ get router 1)
+                  results $ :tags (:results session)
+
+                component-topic-editor topic-data results
+
               :chat-room $ component-chat-room (:current-topic store)
+                :buffers store
               :all-tags $ component-tags-overview (:tags store)
               :live-users $ component-members-overview live-users
               , nil
 
           render-store store
+          comp-notification-center $ :notifications session
 
         div
           {} :style $ {} (:display |flex)
@@ -89,6 +99,8 @@ defn render (store)
             :position |absolute
             :width |100%
             :height |100%
+            :background-color $ hsl 200 90 70
           component-login
+          comp-notification-center $ :notifications session
 
 def component-container $ create-comp :container render

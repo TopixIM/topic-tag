@@ -7,6 +7,7 @@ ns topic-tag.component.topic-editor $ :require
   [] topic-tag.style.widget :as widget
 
 defn init-state (default-topic results)
+  .log js/console "|default topic:" default-topic
   if (some? default-topic)
     {} :text (:text default-topic)
       , :tags
@@ -18,7 +19,7 @@ defn init-state (default-topic results)
 defn update-state (state op op-data)
   case op
     :text $ assoc state :text op-data
-    :query $ assoc state :text op-data
+    :query $ assoc state :query op-data
     :add-tag $ update state :tags
       fn (tags)
         conj tags op-data
@@ -51,12 +52,19 @@ defn handle-add (mutate tag)
   fn (simple-event dispatch)
     mutate :add-tag tag
 
-defn handle-submit (state)
+defn handle-submit (state default-topic)
   fn (simple-event dispatch)
     let
       (topic-data $ {} (:text $ :text state) (:tag-ids $ ->> (:tags state) (map :id) (into $ hash-set)))
 
-      dispatch :topic/create topic-data
+      if
+        >
+          count $ :text state
+          , 0
+        if (some? default-topic)
+          dispatch :topic/update $ [] (:id default-topic)
+            , topic-data
+          dispatch :topic/create topic-data
 
 defn render (default-topic results)
   fn (state mutate)
@@ -73,8 +81,13 @@ defn render (default-topic results)
           into $ sorted-map
 
       div ({} :style widget/field-line)
+        div ({} :style widget/field-guide)
+          span $ {} :attrs ({} :inner-text |Tags)
+
         input $ {} :style widget/textbox :event
           {} :input $ handle-query mutate
+          , :attrs
+          {} :value $ :query state
 
       div ({} :style widget/field-line)
         ->> results
@@ -90,10 +103,12 @@ defn render (default-topic results)
 
         input $ {} :style widget/textbox :event
           {} :input $ handle-input mutate :text
+          , :attrs
+          {} :value $ :text state
 
       div ({} :style widget/toolbar)
         button $ {} :style widget/button :event
-          {} :click $ handle-submit state
+          {} :click $ handle-submit state default-topic
           , :attrs
           {} :inner-text |Submit
 

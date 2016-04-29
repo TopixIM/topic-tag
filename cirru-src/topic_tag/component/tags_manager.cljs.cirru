@@ -43,7 +43,8 @@ defn handle-select (tag)
 defn render (tags results)
   fn (state mutate)
     div
-      {} :style $ {} (:width |400px)
+      {} :style $ {} (:width |100%)
+        :height |100%
         :padding |16px
         :background-color |white
         :border $ str "|1px solid "
